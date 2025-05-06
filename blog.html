@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - MedCompare</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .blog-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform var(--transition), box-shadow var(--transition);
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .blog-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+        
+        .blog-post {
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .blog-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .blog-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .blog-title::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient-1);
+            bottom: -8px;
+            left: 0;
+            border-radius: 3px;
+        }
+        
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .blog-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .blog-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-image {
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: auto;
+            transition: transform var(--transition);
+        }
+        
+        .blog-post:hover .blog-image img {
+            transform: scale(1.03);
+        }
+        
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-tag {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .blog-tag:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+        
+        .read-more::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width var(--transition);
+        }
+        
+        .read-more:hover {
+            color: var(--primary-dark);
+        }
+        
+        .read-more:hover::after {
+            width: 100%;
+        }
+        
+        .read-more i {
+            font-size: 0.75rem;
+            transition: transform var(--transition-fast);
+        }
+        
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, var(--primary), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-capsules"></i>
+                    MedCompare
+                </div>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="container">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h2 class="page-title">MedCompare Blog</h2>
+            
+            <div class="blog-container">
+                <article class="blog-post">
+                    <div class="blog-tags">
+                        <span class="blog-tag">Medications</span>
+                        <span class="blog-tag">Cost Saving</span>
+                        <span class="blog-tag">Health</span>
+                    </div>
+                    <h3 class="blog-title">Generic Vs. Brand Name Medications: What's the Difference?</h3>
+                    <div class="blog-meta">
+                        <div class="blog-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>June 15, 2025</span>
+                        </div>
+                        <div class="blog-meta-item">
+                            <i class="far fa-user"></i>
+                            <span>Dr. Sarah Johnson</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <p>When it comes to medications, consumers often face a choice between brand-name drugs and their generic counterparts. Understanding the differences can help you make informed decisions about your healthcare while potentially saving money.</p>
+                        
+                        <p>Generic medications contain the same active ingredients as their brand-name equivalents and work the same way in the body. They undergo rigorous testing by regulatory authorities to ensure they are as safe and effective as the original brand-name drugs. The main differences lie in appearance, inactive ingredients, and most notably, price.</p>
+                        
+                        <p>Generic drugs are typically 80-85% less expensive than brand-name medications. This significant price difference exists because generic manufacturers don't have to invest in the costly research, development, and marketing that the original drug companies undertook. Additionally, competition among multiple generic manufacturers helps keep prices lower.</p>
+                    </div>
+                    <a href="#" class="read-more">Continue Reading <i class="fas fa-arrow-right"></i></a>
+                </article>
+                
+                <article class="blog-post">
+                    <div class="blog-tags">
+                        <span class="blog-tag">Health Tips</span>
+                        <span class="blog-tag">Medication</span>
+                        <span class="blog-tag">Wellness</span>
+                    </div>
+                    <h3 class="blog-title">The Importance of Medication Adherence: Tips for Staying on Track</h3>
+                    <div class="blog-meta">
+                        <div class="blog-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>May 28, 2025</span>
+                        </div>
+                        <div class="blog-meta-item">
+                            <i class="far fa-user"></i>
+                            <span>Dr. Michael Chen</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <p>Medication adherence—taking medications correctly as prescribed—is crucial for managing chronic conditions and ensuring optimal health outcomes. Yet studies show that approximately 50% of patients don't take their medications as prescribed, leading to poorer health outcomes and increased healthcare costs.</p>
+                        
+                        <p>There are many reasons people struggle with medication adherence, including forgetfulness, complex medication regimens, concerns about side effects, and cost issues. However, several strategies can help improve adherence and ensure you get the full benefit of your prescribed treatments.</p>
+                        
+                        <p>Using pill organizers, setting alarms, incorporating medication into daily routines, and using medication reminder apps are all effective ways to improve adherence. Additionally, discussing any concerns about side effects or medication costs with your healthcare provider can lead to adjustments that make adherence easier.</p>
+                    </div>
+                    <a href="#" class="read-more">Continue Reading <i class="fas fa-arrow-right"></i></a>
+                </article>
+                
+                <article class="blog-post">
+                    <div class="blog-tags">
+                        <span class="blog-tag">Allergies</span>
+                        <span class="blog-tag">Seasonal</span>
+                        <span class="blog-tag">Treatment</span>
+                    </div>
+                    <h3 class="blog-title">Navigating Seasonal Allergies: Finding the Right Medication</h3>
+                    <div class="blog-meta">
+                        <div class="blog-meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>April 10, 2025</span>
+                        </div>
+                        <div class="blog-meta-item">
+                            <i class="far fa-user"></i>
+                            <span>Dr. Emily Rodriguez</span>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <p>Seasonal allergies affect millions of people worldwide, causing symptoms like sneezing, runny nose, itchy eyes, and congestion. With numerous over-the-counter and prescription options available, finding the right medication can be overwhelming.</p>
+                        
+                        <p>Antihistamines are often the first line of defense against allergies, blocking the action of histamine, a substance your body produces during an allergic reaction. First-generation antihistamines like diphenhydramine (Benadryl) are effective but can cause drowsiness, while second-generation options like cetirizine (Zyrtec), loratadine (Claritin), and fexofenadine (Allegra) are less sedating.</p>
+                        
+                        <p>For nasal congestion, decongestants like pseudoephedrine can provide relief by reducing swelling in the nasal passages. Nasal corticosteroid sprays like fluticasone (Flonase) and mometasone (Nasonex) reduce inflammation and are particularly effective for nasal symptoms when used regularly.</p>
+                    </div>
+                    <a href="#" class="read-more">Continue Reading <i class="fas fa-arrow-right"></i></a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-capsules"></i>
+                        MedCompare
+                    </div>
+                    <p class="footer-description">
+                        Helping you save on medications with price comparisons.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#search-section">Medicine Search</a></li>
+                        <li><a href="index.html#features">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                        <li><a href="health-tips.html">Health Tips</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:su-24143@sitare.org">su-24143@sitare.org</a></li>
+                        <li><a href="tel:+918738902909">+91 8738902909</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 MedCompare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="chart.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

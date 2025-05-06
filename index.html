@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCompare - Medicine Price Comparison</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-capsules"></i>
+                    MedCompare
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#search-section">Medicine Search</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about-us">About Us</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
+                    <div class="auth-buttons">
+                        <a href="signin.html" class="btn btn-outline">Sign In</a>
+                        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section (Home) -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content animate-fadeIn">
+                <h1 class="hero-title">Compare <span>Medicine Prices</span></h1>
+                <p class="hero-subtitle">Save by comparing prices across different online pharmacies.</p>
+                <button class="btn btn-primary">Start Saving Now</button>
+            </div>
+            <div class="hero-image animate-fadeIn">
+                <img src="placeholder_500x350.png" alt="Medicine comparison">
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="container" id="search-section">
+        <div class="search-container animate-fadeIn">
+            <h2 class="search-title">Find the Best Price</h2>
+            <form class="search-form" id="search-form">
+                <input type="text" class="search-input" placeholder="Enter medicine name..." id="medicine-search">
+                <button type="button" class="search-button btn btn-primary" id="search-btn">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why MedCompare?</h2>
+            <div class="features-grid">
+                <div class="feature-card animate-fadeIn">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="feature-title">Instant Comparison</h3>
+                    <p class="feature-description">Compare prices across multiple pharmacies in seconds.</p>
+                </div>
+                <div class="feature-card animate-fadeIn">
+                    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3 class="feature-title">Visual Price Charts</h3>
+                    <p class="feature-description">See price differences with easy-to-read visual charts.</p>
+                </div>
+                <div class="feature-card animate-fadeIn">
+                    <div class="feature-icon"><i class="fas fa-search-dollar"></i></div>
+                    <h3 class="feature-title">Best Price Finder</h3>
+                    <p class="feature-description">Quickly identify the lowest price for your medications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results" id="results-section">
+        <div class="container">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title">Search Results</h2>
+                </div>
+                <div class="scraper-results" id="scraper-results">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (About Us) -->
+    <footer id="about-us">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-capsules"></i>
+                        MedCompare
+                    </div>
+                    <p class="footer-description">
+                        Helping you save on medications with price comparisons.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Medicine Search</a></li>
+                        <li><a href="#">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                        <li><a href="health-tips.html">Health Tips</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@medcompare.com">su-24143@sitare.org</a></li>
+                        <li><a href="tel:+911234567890">+91 8738902909</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 MedCompare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="chart.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

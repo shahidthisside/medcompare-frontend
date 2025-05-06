@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tips - MedCompare</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .health-tips-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform var(--transition), box-shadow var(--transition);
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .health-tips-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+        
+        .tip-card {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .tip-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .tip-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .tip-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .medicine-info {
+            background-color: rgba(37, 99, 235, 0.05);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-top: 1.5rem;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .medicine-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .medicine-usage {
+            margin-bottom: 0.5rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, var(--primary), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-capsules"></i>
+                    MedCompare
+                </div>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Health Tips Section -->
+    <section class="health-tips-section">
+        <div class="container">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h2 class="page-title">Health Tips & Common Medicines</h2>
+            
+            <div class="health-tips-container">
+                <div class="tip-card">
+                    <h3 class="tip-title">Maintaining a Healthy Immune System</h3>
+                    <div class="tip-content">
+                        <p>A strong immune system is your body's first line of defense against infections and illnesses. Here are some tips to boost your immunity:</p>
+                        <ul>
+                            <li>Get adequate sleep (7-9 hours for adults)</li>
+                            <li>Eat a balanced diet rich in fruits and vegetables</li>
+                            <li>Exercise regularly</li>
+                            <li>Stay hydrated</li>
+                            <li>Manage stress through meditation or other relaxation techniques</li>
+                            <li>Avoid smoking and limit alcohol consumption</li>
+                        </ul>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Vitamin C Supplements</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> Vitamin C is an antioxidant that helps strengthen the immune system. It's commonly taken to prevent or reduce the duration of the common cold.</p>
+                            <p><strong>Typical Dosage:</strong> 500-1000mg daily for adults. Always follow the dosage instructions on the product label.</p>
+                        </div>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Zinc Supplements</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> Zinc supports immune function and may help reduce the duration of cold symptoms when taken at the onset of illness.</p>
+                            <p><strong>Typical Dosage:</strong> 15-30mg daily for adults during illness. Long-term use should be limited to 15mg daily.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <h3 class="tip-title">Managing Fever and Pain</h3>
+                    <div class="tip-content">
+                        <p>Fever is a common symptom of many illnesses and is actually a sign that your body is fighting an infection. Here's how to manage fever and associated pain:</p>
+                        <ul>
+                            <li>Stay hydrated by drinking plenty of fluids</li>
+                            <li>Rest to help your body recover</li>
+                            <li>Use a light blanket if you have chills</li>
+                            <li>Take a lukewarm bath to help reduce fever</li>
+                            <li>Consult a doctor if fever persists for more than three days or exceeds 103°F (39.4°C)</li>
+                        </ul>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Paracetamol (Acetaminophen)</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> Used to reduce fever and relieve mild to moderate pain from headaches, muscle aches, and colds.</p>
+                            <p><strong>Typical Dosage:</strong> For adults, 500-1000mg every 4-6 hours as needed, not exceeding 4000mg in 24 hours.</p>
+                        </div>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Ibuprofen</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> A nonsteroidal anti-inflammatory drug (NSAID) used to reduce fever, pain, and inflammation.</p>
+                            <p><strong>Typical Dosage:</strong> For adults, 200-400mg every 4-6 hours as needed, not exceeding 1200mg in 24 hours unless directed by a doctor.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <h3 class="tip-title">Digestive Health</h3>
+                    <div class="tip-content">
+                        <p>Maintaining good digestive health is essential for overall wellbeing. Here are some tips for a healthy digestive system:</p>
+                        <ul>
+                            <li>Eat a high-fiber diet including fruits, vegetables, and whole grains</li>
+                            <li>Stay hydrated by drinking plenty of water</li>
+                            <li>Exercise regularly to promote healthy digestion</li>
+                            <li>Eat slowly and chew food thoroughly</li>
+                            <li>Manage stress, which can affect digestive function</li>
+                            <li>Limit fatty foods, alcohol, and caffeine</li>
+                        </ul>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Antacids</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> Used to neutralize stomach acid and provide relief from heartburn, acid indigestion, and upset stomach.</p>
+                            <p><strong>Typical Usage:</strong> Take as directed on the product label, usually after meals and at bedtime.</p>
+                        </div>
+                        
+                        <div class="medicine-info">
+                            <h4 class="medicine-name">Probiotics</h4>
+                            <p class="medicine-usage"><strong>Usage:</strong> Supplements containing beneficial bacteria that help maintain a healthy gut microbiome.</p>
+                            <p><strong>Typical Usage:</strong> Follow product directions, usually one capsule daily with a meal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-capsules"></i>
+                        MedCompare
+                    </div>
+                    <p class="footer-description">
+                        Helping you save on medications with price comparisons.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#search-section">Medicine Search</a></li>
+                        <li><a href="index.html#features">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                        <li><a href="health-tips.html">Health Tips</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:su-24143@sitare.org">su-24143@sitare.org</a></li>
+                        <li><a href="tel:+918738902909">+91 8738902909</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 MedCompare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="chart.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
