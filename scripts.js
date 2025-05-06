@@ -38,6 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchScrapedMedicines(query) {
+        // Destroy any existing chart before starting a new search
+        const chartContainer = document.getElementById('price-per-unit-chart');
+        if (chartContainer) {
+            const existingChart = Chart.getChart(chartContainer);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+        }
+        
+        // Remove any existing savings summary
+        const existingSummary = document.querySelector('.savings-summary');
+        if (existingSummary) {
+            existingSummary.remove();
+        }
+        
         // Show loading spinner with progress bar
         scraperResults.innerHTML = `
             <div class="loading-spinner">
@@ -431,6 +446,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             unitType: unitInfo.unitType,
                             pricePerUnit: extractNumericPrice(product.price) / unitInfo.units
                         });
+                    } else {
+                        // Even if we can't extract unit info, still include the product
+                        // with a generic label to ensure all products are represented
+                        unitPriceData.push({
+                            website: website,
+                            medicine: product.medicine,
+                            quantity: product.quantity,
+                            price: extractNumericPrice(product.price),
+                            units: 1,
+                            unitType: 'unit',
+                            pricePerUnit: extractNumericPrice(product.price)
+                        });
                     }
                 });
             }
@@ -472,6 +499,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const label = `${medicine} (per ${unitType})`;
             labels.push(label);
             
+            // Calculate min and max prices for this medicine
+            let minPrice = Infinity;
+            
+            items.forEach(item => {
+                if (item.pricePerUnit < minPrice) {
+                    minPrice = item.pricePerUnit;
+                }
+            });
+            
             items.forEach(item => {
                 if (!websiteData[item.website]) {
                     websiteData[item.website] = {
@@ -479,12 +515,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         data: Array(labels.length - 1).fill(null),
                         backgroundColor: colors[item.website] || 'rgba(156, 163, 175, 0.7)',
                         borderColor: (colors[item.website] || 'rgba(156, 163, 175, 0.7)').replace('0.7', '1'),
-                        borderWidth: 1
+                        borderWidth: 1,
+                        // Add this to highlight the best value
+                        borderDash: []
                     };
                 }
                 
                 // Add data for this medicine
-                websiteData[item.website].data.push(parseFloat(item.pricePerUnit.toFixed(2)));
+                const dataPoint = parseFloat(item.pricePerUnit.toFixed(2));
+                websiteData[item.website].data.push(dataPoint);
+                
+                // Highlight the best value with a different border
+                if (item.pricePerUnit === minPrice) {
+                    const dataIndex = websiteData[item.website].data.length - 1;
+                    if (!websiteData[item.website].bestValueIndexes) {
+                        websiteData[item.website].bestValueIndexes = [];
+                    }
+                    websiteData[item.website].bestValueIndexes.push(dataIndex);
+                }
                 
                 // Fill in nulls for other medicines
                 while (websiteData[item.website].data.length < labels.length) {
@@ -496,50 +544,183 @@ document.addEventListener('DOMContentLoaded', () => {
         // Convert websiteData to array of datasets
         datasets.push(...Object.values(websiteData));
         
-        // Create the chart
+        // Find the maximum value for y-axis scaling
+        let maxValue = 0;
+        datasets.forEach(dataset => {
+            const datasetMax = Math.max(...dataset.data.filter(val => val !== null));
+            if (datasetMax > maxValue) maxValue = datasetMax;
+        });
+        
+        // Calculate a better y-axis max value for readability
+        // For small values (< 10), use a smaller step size
+        const yAxisMax = maxValue < 10 ? Math.ceil(maxValue * 1.2) : Math.ceil(maxValue * 1.1);
+        
+        // Destroy any existing chart
+        const chartContainer = document.getElementById('price-per-unit-chart');
+        if (chartContainer) {
+            const existingChart = Chart.getChart(chartContainer);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+        }
+        
+        // Create the chart - HORIZONTAL BAR CHART WITH ZOOM FUNCTIONALITY
         const ctx = document.getElementById('price-per-unit-chart').getContext('2d');
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: datasets
             },
             options: {
+                indexAxis: 'y', // This makes the bars horizontal
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                            threshold: 5
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'x',
+                            onZoomComplete: function() {
+                                // Optional callback when zoom is complete
+                                console.log('Zoom completed');
+                            }
+                        }
+                    },
                     title: {
                         display: true,
-                        text: 'Price Per Unit Comparison'
+                        text: 'Price Per Unit Comparison',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': ₹' + context.raw + ' per unit';
+                                const datasetLabel = context.dataset.label || '';
+                                const value = context.raw || 0;
+                                return `${datasetLabel}: ₹${value} per ${labels[context.dataIndex].split('(per ')[1].replace(')', '')}`;
                             }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 12
+                            },
+                            padding: 15
                         }
                     }
                 },
-                legend: {
-                    position: 'top'
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        maxRotation: 45,
-                        minRotation: 45
+                scales: {
+                    // For horizontal bar chart, x and y axes are swapped
+                    x: {
+                        beginAtZero: true,
+                        max: yAxisMax, // Use our calculated max value for better readability
+                        title: {
+                            display: true,
+                            text: 'Price per Unit (₹)',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            // For small values, use more tick steps
+                            stepSize: maxValue < 5 ? 0.5 : (maxValue < 10 ? 1 : Math.ceil(maxValue / 10)),
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
                     }
                 },
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Price per Unit (₹)'
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 10
                     }
-                }
+                },
+                barPercentage: 0.8,
+                categoryPercentage: 0.7
             }
         });
+        
+        // Add reset zoom button
+        const resetZoomBtn = document.createElement('button');
+        resetZoomBtn.className = 'reset-zoom-btn';
+        resetZoomBtn.textContent = 'Reset Zoom';
+        resetZoomBtn.addEventListener('click', function() {
+            chart.resetZoom();
+        });
+        
+        // Add the reset zoom button after the chart
+        const chartWrapper = document.querySelector('.chart-wrapper');
+        chartWrapper.parentNode.insertBefore(resetZoomBtn, chartWrapper.nextSibling);
+        
+        // Add some CSS for the reset zoom button if it doesn't exist
+        if (!document.querySelector('#reset-zoom-styles')) {
+            const style = document.createElement('style');
+            style.id = 'reset-zoom-styles';
+            style.textContent = `
+                .reset-zoom-btn {
+                    margin-top: 10px;
+                    padding: 8px 16px;
+                    background-color: var(--primary);
+                    color: white;
+                    border: none;
+                    border-radius: var(--radius);
+                    cursor: pointer;
+                    font-weight: 500;
+                    transition: all var(--transition-fast);
+                }
+                .reset-zoom-btn:hover {
+                    background-color: var(--primary-dark);
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow-sm);
+                }
+                .chart-wrapper {
+                    position: relative;
+                    height: 400px;
+                    margin-bottom: 10px;
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
     
     // Create a chart showing potential savings
